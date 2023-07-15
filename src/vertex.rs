@@ -1,7 +1,9 @@
-use bevy::render::color::Color;
+use bevy::{render::color::Color, prelude::Vec2};
 use lyon_tessellation::{
     self as tess, FillVertex, FillVertexConstructor, StrokeVertex, StrokeVertexConstructor,
 };
+
+use crate::brush::{Brush, Brusher};
 
 /// The index type of a Bevy [`Mesh`](bevy::render::mesh::Mesh).
 type IndexType = u32;
@@ -18,26 +20,26 @@ pub struct Vertex {
 
 /// Zero-sized type used to implement various vertex construction traits from
 /// Lyon.
-pub struct VertexConstructor {
-    pub color: Color,
+pub struct VertexConstructor<'a> {
+    pub brush: &'a Brush,
 }
 
 /// Enables the construction of a [`Vertex`] when using a `FillTessellator`.
-impl FillVertexConstructor<Vertex> for VertexConstructor {
+impl FillVertexConstructor<Vertex> for VertexConstructor<'_> {
     fn new_vertex(&mut self, vertex: FillVertex) -> Vertex {
         Vertex {
             position: [vertex.position().x, vertex.position().y],
-            color: self.color.as_linear_rgba_f32(),
+            color: self.brush.brush(Vec2::new(vertex.position().x, vertex.position().y)).as_linear_rgba_f32(),
         }
     }
 }
 
 /// Enables the construction of a [`Vertex`] when using a `StrokeTessellator`.
-impl StrokeVertexConstructor<Vertex> for VertexConstructor {
+impl StrokeVertexConstructor<Vertex> for VertexConstructor<'_> {
     fn new_vertex(&mut self, vertex: StrokeVertex) -> Vertex {
         Vertex {
             position: [vertex.position().x, vertex.position().y],
-            color: self.color.as_linear_rgba_f32(),
+            color: self.brush.brush(Vec2::new(vertex.position().x, vertex.position().y)).as_linear_rgba_f32(),
         }
     }
 }

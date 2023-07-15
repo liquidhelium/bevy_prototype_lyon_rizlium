@@ -11,7 +11,7 @@
 
 // rustc
 #![deny(future_incompatible, nonstandard_style)]
-#![warn(missing_docs, rust_2018_idioms, unused)]
+// #![warn(missing_docs, rust_2018_idioms, unused)]
 #![allow(elided_lifetimes_in_paths)]
 // clippy
 #![warn(clippy::all, clippy::pedantic, clippy::nursery, clippy::cargo)]
@@ -30,6 +30,7 @@ pub mod path;
 pub mod plugin;
 pub mod render;
 pub mod shapes;
+pub mod brush;
 
 mod utils;
 mod vertex;

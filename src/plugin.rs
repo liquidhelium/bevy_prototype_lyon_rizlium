@@ -88,7 +88,7 @@ fn mesh_shapes_system(
             fill(
                 &mut fill_tess,
                 &path.0,
-                &Fill::color(Color::FUCHSIA),
+                &Fill::brush(Color::FUCHSIA),
                 &mut buffers,
             );
         }
@@ -107,7 +107,7 @@ fn fill(
     if let Err(e) = tess.tessellate_path(
         path,
         &mode.options,
-        &mut BuffersBuilder::new(buffers, VertexConstructor { color: mode.color }),
+        &mut BuffersBuilder::new(buffers, VertexConstructor { brush: &mode.brush }),
     ) {
         error!("FillTessellator error: {:?}", e);
     }
@@ -123,7 +123,7 @@ fn stroke(
     if let Err(e) = tess.tessellate_path(
         path,
         &mode.options,
-        &mut BuffersBuilder::new(buffers, VertexConstructor { color: mode.color }),
+        &mut BuffersBuilder::new(buffers, VertexConstructor { brush: &mode.brush }),
     ) {
         error!("StrokeTessellator error: {:?}", e);
     }
