@@ -49,5 +49,6 @@ pub mod prelude {
         path::{PathBuilder, ShapePath},
         plugin::ShapePlugin,
         shapes::{self, RectangleOrigin, RegularPolygon, RegularPolygonFeature},
+        brush::*
     };
 }

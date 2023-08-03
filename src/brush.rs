@@ -1,9 +1,9 @@
 use bevy::{
-    math::{Mat3, Vec2},
+    math::Vec2,
     prelude::default,
-    render::color::Color,
+    render::color::Color, reflect::Reflect
 };
-use lyon_algorithms::geom::euclid::{approxeq::ApproxEq, default};
+use lyon_algorithms::geom::euclid::approxeq::ApproxEq;
 
 macro_rules! all_dyn {
     ($self:ident,
@@ -17,10 +17,16 @@ macro_rules! all_dyn {
     };
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq,Reflect)]
+#[reflect(PartialEq)]
 pub enum Brush {
     Color(Color),
     Gradient(Gradient),
+}
+impl Default for Brush {
+    fn default() -> Self {
+        Self::Color(default())
+    }
 }
 
 impl Brusher for Brush {
@@ -63,7 +69,8 @@ impl Into<Brush> for Gradient {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq,Reflect)]
+#[reflect(PartialEq)]
 pub enum Gradient {
     Linear(LinearGradient),
 }
@@ -73,7 +80,8 @@ impl Into<Gradient> for LinearGradient {
         Gradient::Linear(self)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Default, Debug, Clone, PartialEq,Reflect)]
+#[reflect(PartialEq)]
 pub struct LinearGradient {
     pub start: Vec2,
     pub end: Vec2,
@@ -96,16 +104,12 @@ impl LinearGradient {
     fn progress(&self, pos: Vec2) -> f32 {
         let vec = self.end - self.start;
         let length = vec.length();
+        let posing_vec = pos - self.start;
         if !length.approx_eq(&0.) {
-            let gradient_vec = vec.normalize();
-            let sin = gradient_vec.y;
-            let cos = gradient_vec.x;
-            let mut mat =
-                Mat3::from_cols_array_2d(&[[cos, -sin, 0.], [sin, cos, 0.], [0., 0., 1.]]);
-            mat *= Mat3::from_translation(-self.start);
-            mat *= 1. / length;
-            mat.transform_vector2(pos).x
-        } else {
+            let product = vec.dot(posing_vec);
+            return product / (length*length);
+        } 
+        else {
             0.
         }
     }
@@ -132,14 +136,22 @@ impl Brusher for LinearGradient {
         if self.stops.len() <= 1 {
             return self.stops.get(0).map(|i| i.color).unwrap_or(Color::BLACK);
         }
+        if self.stops.len() == 2 {
+            if self.stops[0] == self.stops[1] {
+                return self.stops[0].color;
+            }
+        }
         let progress = NonNan::new_checked(self.progress(pos).clamp(0., 1.)).unwrap();
         let (Ok(index) | Err(index)) = self
             .stops
             .binary_search_by_key(&progress, |item| NonNan::new_checked(item.offset).unwrap());
         let index = index.clamp(0, self.stops.len() - 2);
         let former = self.stops[index];
-        let latter = self.stops[index];
-        let t = (progress.0 - former.offset) / (latter.offset - former.offset);
+        let latter = self.stops[index+1];
+        let mut t = (progress.0 - former.offset)/(latter.offset - former.offset);
+        if t.is_nan() {
+            t = 0.;
+        }
         let color1 = former.color.as_linear_rgba_f32();
         let color2 = latter.color.as_linear_rgba_f32();
         let lerp: Vec<_> = color1
@@ -156,7 +168,8 @@ impl Brusher for LinearGradient {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq,Reflect)]
+#[reflect(PartialEq)]
 pub struct GradientStop {
     offset: f32,
     color: Color,

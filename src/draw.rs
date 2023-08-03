@@ -1,6 +1,6 @@
 //! Types for defining shape color and options.
 
-use bevy::{ecs::component::Component, render::color::Color};
+use bevy::{ecs::component::Component, render::color::Color, reflect::Reflect, prelude::ReflectComponent};
 use lyon_tessellation::{FillOptions, StrokeOptions};
 
 use crate::brush::Brush;
@@ -8,8 +8,10 @@ use crate::brush::Brush;
 /// Defines the fill options for the lyon tessellator and color of the generated
 /// vertices.
 #[allow(missing_docs)]
-#[derive(Component, Debug, Clone, PartialEq)]
+#[derive(Component, Debug, Clone, PartialEq, Reflect,Default)]
+#[reflect(Component)]
 pub struct Fill {
+    #[reflect(ignore)]
     pub options: FillOptions,
     pub brush: Brush,
 }
@@ -28,8 +30,10 @@ impl Fill {
 /// Defines the stroke options for the lyon tessellator and color of the
 /// generated vertices.
 #[allow(missing_docs)]
-#[derive(Component, Debug, Clone, PartialEq)]
+#[derive(Component, Debug, Clone, PartialEq,Reflect, Default)]
+#[reflect(Component)]
 pub struct Stroke {
+    #[reflect(ignore)]
     pub options: StrokeOptions,
     pub brush: Brush,
 }

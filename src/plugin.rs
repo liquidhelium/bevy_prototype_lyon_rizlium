@@ -34,7 +34,7 @@ use crate::{
     draw::{Fill, Stroke},
     entity::Path,
     render::ShapeMaterialPlugin,
-    vertex::{VertexBuffers, VertexConstructor},
+    vertex::{VertexBuffers, VertexConstructor}, brush::{Gradient, GradientStop, Brush, LinearGradient},
 };
 
 /// A plugin that provides resources and a system to draw shapes in Bevy with
@@ -52,7 +52,13 @@ impl Plugin for ShapePlugin {
                 BuildShapes.after(bevy::transform::TransformSystem::TransformPropagate),
             )
             .add_systems(PostUpdate, mesh_shapes_system.in_set(BuildShapes))
-            .add_plugins(ShapeMaterialPlugin);
+            .add_plugins(ShapeMaterialPlugin)
+            .register_type::<Fill>()
+            .register_type::<Stroke>()
+            .register_type::<Gradient>()
+            .register_type::<GradientStop>()
+            .register_type::<Brush>()
+            .register_type::<LinearGradient>();
     }
 }
 

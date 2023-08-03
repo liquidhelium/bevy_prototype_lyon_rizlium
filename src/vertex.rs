@@ -1,4 +1,4 @@
-use bevy::{render::color::Color, prelude::Vec2};
+use bevy::prelude::Vec2;
 use lyon_tessellation::{
     self as tess, FillVertex, FillVertexConstructor, StrokeVertex, StrokeVertexConstructor,
 };
