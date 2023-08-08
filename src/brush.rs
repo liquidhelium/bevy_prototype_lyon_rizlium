@@ -134,7 +134,7 @@ impl Ord for NonNan {
 impl Brusher for LinearGradient {
     fn brush(&self, pos: Vec2) -> Color {
         if self.stops.len() <= 1 {
-            return self.stops.get(0).map(|i| i.color).unwrap_or(Color::BLACK);
+            return self.stops.get(0).map(|i| i.color).unwrap_or(Color::NONE);
         }
         if self.stops.len() == 2 {
             if self.stops[0] == self.stops[1] {

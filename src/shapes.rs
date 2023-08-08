@@ -4,7 +4,7 @@
 //! [`Geometry`](crate::geometry::Geometry) trait. You can also implement
 //! the trait for your own shapes.
 
-use bevy::math::Vec2;
+use bevy::{math::Vec2, prelude::Rect};
 use lyon_tessellation::{
     geom::euclid::default::Size2D,
     math::{point, Angle, Box2D, Point, Vector},
@@ -41,34 +41,28 @@ impl Default for RectangleOrigin {
 #[allow(missing_docs)]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Rectangle {
-    pub extents: Vec2,
-    pub origin: RectangleOrigin,
+    pub rect: Rect,
+}
+
+impl Rectangle {
+    pub fn new(rect: Rect) -> Self { Self { rect } }
 }
 
 impl Default for Rectangle {
     fn default() -> Self {
         Self {
-            extents: Vec2::ONE,
-            origin: RectangleOrigin::default(),
+            rect: Rect::default()
         }
     }
 }
 
 impl Geometry for Rectangle {
     fn add_geometry(&self, b: &mut Builder) {
-        let origin = match self.origin {
-            RectangleOrigin::Center => Point::new(-self.extents.x / 2.0, -self.extents.y / 2.0),
-            RectangleOrigin::BottomLeft => Point::new(0.0, 0.0),
-            RectangleOrigin::BottomRight => Point::new(-self.extents.x, 0.0),
-            RectangleOrigin::TopRight => Point::new(-self.extents.x, -self.extents.y),
-            RectangleOrigin::TopLeft => Point::new(0.0, -self.extents.y),
-            RectangleOrigin::CustomCenter(v) => {
-                Point::new(v.x - self.extents.x / 2.0, v.y - self.extents.y / 2.0)
-            }
-        };
-
         b.add_rectangle(
-            &Box2D::from_origin_and_size(origin, Size2D::new(self.extents.x, self.extents.y)),
+            &Box2D {
+                min: self.rect.min.to_point(),
+                max: self.rect.max.to_point(),
+            },
             Winding::Positive,
         );
     }
