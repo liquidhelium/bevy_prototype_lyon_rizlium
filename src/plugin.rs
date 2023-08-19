@@ -143,7 +143,9 @@ fn build_mesh(buffers: &VertexBuffers) -> Mesh {
         buffers
             .vertices
             .iter()
-            .map(|v| [v.position[0], v.position[1], 0.0])
+            .map(|v| {
+                [v.position[0], v.position[1], 0.0]
+            })
             .collect::<Vec<[f32; 3]>>(),
     );
     mesh.insert_attribute(

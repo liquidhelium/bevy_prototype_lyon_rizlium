@@ -6,7 +6,6 @@
 
 use bevy::{math::Vec2, prelude::Rect};
 use lyon_tessellation::{
-    geom::euclid::default::Size2D,
     math::{point, Angle, Box2D, Point, Vector},
     path::{
         builder::WithSvg, path::Builder, traits::SvgPathBuilder, ArcFlags, Polygon as LyonPolygon,
