@@ -37,6 +37,9 @@ impl Material2d for GradientMaterial {
     fn fragment_shader() -> ShaderRef {
         GRADIENT_MATERIAL_SHADER_HANDLE.typed().into()
     }
+    fn vertex_shader() -> ShaderRef {
+        GRADIENT_MATERIAL_SHADER_HANDLE.typed().into()
+    }
 }
 
 /// A simple `Material2d` that renders with vertex colors.

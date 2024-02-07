@@ -1,9 +1,6 @@
-#import bevy_sprite::{
-    mesh2d_functions as mesh_functions,
-    // mesh2d_vertex_output::VertexOutput,
-    mesh2d_view_bindings::view,
-}
-
+#import bevy_sprite::mesh2d_functions as mesh_functions
+#import bevy_sprite::mesh2d_bindings       mesh
+#import bevy_sprite::mesh2d_view_bindings  view
 #ifdef TONEMAP_IN_SHADER
 #import bevy_core_pipeline::tonemapping
 #endif
@@ -22,7 +19,7 @@ fn invlerp_points(pos1: vec2<f32>, pos2: vec2<f32>, pos: vec2<f32>) -> f32 {
     let vec_length = length(pointing_vec);
     let posing_vec = pos - pos1;
     if vec_length != 0. {
-        let product = dot(pointing_vec,posing_vec);
+        let product = dot(pointing_vec, posing_vec);
         return product / (vec_length * vec_length);
     } else {
         return 0.;
@@ -42,6 +39,9 @@ struct Vertex {
 #endif
 #ifdef VERTEX_TANGENTS
     @location(3) tangent: vec4<f32>,
+#endif
+#ifdef VERTEX_COLORS
+    @location(4) color: vec4<f32>,
 #endif
 };
 struct VertexOutput {
@@ -69,21 +69,20 @@ fn vertex(vertex: Vertex) -> VertexOutput {
 #endif
 
 #ifdef VERTEX_POSITIONS
-    var model = mesh_functions::get_model_matrix(vertex.instance_index);
     out.world_position = mesh_functions::mesh2d_position_local_to_world(
-        model,
+        mesh.model,
         vec4<f32>(vertex.position, 1.0)
     );
     out.position = mesh_functions::mesh2d_position_world_to_clip(out.world_position);
 #endif
 
 #ifdef VERTEX_NORMALS
-    out.world_normal = mesh_functions::mesh2d_normal_local_to_world(vertex.normal, vertex.instance_index);
+    out.world_normal = mesh_functions::mesh2d_normal_local_to_world(vertex.normal);
 #endif
 
 #ifdef VERTEX_TANGENTS
     out.world_tangent = mesh_functions::mesh2d_tangent_local_to_world(
-        model,
+        mesh.model,
         vertex.tangent
     );
 #endif

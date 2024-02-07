@@ -19,4 +19,4 @@ lyon_algorithms = "1"
 svgtypes = "0.8"
 
 [dev-dependencies]
-bevy = { version = "0.11", default-features = false, features = ["x11", "bevy_asset"] }
+bevy = { version = "0.11", default-features = false, features = ["wayland", "bevy_asset"] }
