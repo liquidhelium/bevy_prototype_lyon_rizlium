@@ -15,7 +15,6 @@ pub type VertexBuffers = tess::VertexBuffers<Vertex, IndexType>;
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Vertex {
     pub position: [f32; 2],
-    pub color: [f32; 4],
 }
 
 /// Zero-sized type used to implement various vertex construction traits from
@@ -29,7 +28,6 @@ impl FillVertexConstructor<Vertex> for VertexConstructor<'_> {
     fn new_vertex(&mut self, vertex: FillVertex) -> Vertex {
         Vertex {
             position: [vertex.position().x, vertex.position().y],
-            color: self.brush.brush(Vec2::new(vertex.position().x, vertex.position().y)).as_linear_rgba_f32(),
         }
     }
 }
@@ -39,7 +37,6 @@ impl StrokeVertexConstructor<Vertex> for VertexConstructor<'_> {
     fn new_vertex(&mut self, vertex: StrokeVertex) -> Vertex {
         Vertex {
             position: [vertex.position().x, vertex.position().y],
-            color: self.brush.brush(Vec2::new(vertex.position().x, vertex.position().y)).as_linear_rgba_f32(),
-        }
+            }
     }
 }

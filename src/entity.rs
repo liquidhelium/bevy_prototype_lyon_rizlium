@@ -8,7 +8,7 @@ use bevy::{
 };
 use lyon_tessellation::{self as tess};
 
-use crate::{prelude::Geometry, render::ShapeMaterial};
+use crate::{prelude::Geometry, render::GradientMaterial};
 
 /// A Bevy `Bundle` to represent a shape.
 #[allow(missing_docs)]
@@ -17,7 +17,7 @@ pub struct ShapeBundle {
     pub path: Path,
     pub mesh: Mesh2dHandle,
     pub aabb: Aabb,
-    pub material: Handle<ShapeMaterial>,
+    pub material: Handle<GradientMaterial>,
     pub transform: Transform,
     pub global_transform: GlobalTransform,
     pub visibility: Visibility,
@@ -28,7 +28,7 @@ pub struct ShapeBundle {
 pub struct SimpleShapeBundle {
     pub path: Path,
     pub mesh: Mesh2dHandle,
-    pub material: Handle<ShapeMaterial>,
+    pub material: Handle<GradientMaterial>,
     pub visibility: Visibility,
 }
 impl Default for SimpleShapeBundle {
@@ -36,7 +36,7 @@ impl Default for SimpleShapeBundle {
         Self {
             path: Path(tess::path::Path::new()),
             mesh: Mesh2dHandle::default(),
-            material: Handle::<ShapeMaterial>::default(),
+            material: Handle::<GradientMaterial>::default(),
             visibility: Visibility::Visible,
         }
     }
@@ -48,7 +48,7 @@ impl Default for ShapeBundle {
             path: Path(tess::path::Path::new()),
             mesh: Mesh2dHandle::default(),
             aabb: Aabb::default(),
-            material: Handle::<ShapeMaterial>::default(),
+            material: Handle::<GradientMaterial>::default(),
             transform: Transform::default(),
             global_transform: GlobalTransform::default(),
             visibility: Visibility::default(),

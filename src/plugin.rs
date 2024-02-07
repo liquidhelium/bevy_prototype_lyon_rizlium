@@ -13,7 +13,7 @@
 
 use bevy::{
     app::{App, Plugin},
-    asset::Assets,
+    asset::{Assets, Handle},
     ecs::{
         query::{Changed, Or},
         system::{Query, ResMut, Resource},
@@ -31,10 +31,7 @@ use bevy::{
 use lyon_tessellation::{self as tess, BuffersBuilder};
 
 use crate::{
-    draw::{Fill, Stroke},
-    entity::Path,
-    render::ShapeMaterialPlugin,
-    vertex::{VertexBuffers, VertexConstructor}, brush::{Gradient, GradientStop, Brush, LinearGradient},
+    brush::{Brush, Gradient, GradientStop, LinearGradient}, draw::{Fill, Stroke}, entity::Path, render::{GradientMaterial, GradientMaterialPlugin}, vertex::{VertexBuffers, VertexConstructor}
 };
 
 /// A plugin that provides resources and a system to draw shapes in Bevy with
@@ -52,7 +49,7 @@ impl Plugin for ShapePlugin {
                 BuildShapes.after(bevy::transform::TransformSystem::TransformPropagate),
             )
             .add_systems(PostUpdate, mesh_shapes_system.in_set(BuildShapes))
-            .add_plugins(ShapeMaterialPlugin)
+            .add_plugins(GradientMaterialPlugin)
             .register_type::<Fill>()
             .register_type::<Stroke>()
             .register_type::<Gradient>()
@@ -72,14 +69,21 @@ pub struct BuildShapes;
 #[allow(clippy::type_complexity)]
 fn mesh_shapes_system(
     mut meshes: ResMut<Assets<Mesh>>,
+    mut gradients: ResMut<Assets<GradientMaterial>>,
     mut fill_tess: ResMut<FillTessellator>,
     mut stroke_tess: ResMut<StrokeTessellator>,
     mut query: Query<
-        (Option<&Fill>, Option<&Stroke>, &Path, &mut Mesh2dHandle),
+        (
+            Option<&Fill>,
+            Option<&Stroke>,
+            &Path,
+            &mut Mesh2dHandle,
+            &mut Handle<GradientMaterial>,
+        ),
         Or<(Changed<Path>, Changed<Fill>, Changed<Stroke>)>,
     >,
 ) {
-    for (maybe_fill_mode, maybe_stroke_mode, path, mut mesh) in &mut query {
+    for (maybe_fill_mode, maybe_stroke_mode, path, mut mesh, mut material) in &mut query {
         let mut buffers = VertexBuffers::new();
 
         if let Some(fill_mode) = maybe_fill_mode {
@@ -100,6 +104,17 @@ fn mesh_shapes_system(
         }
 
         mesh.0 = meshes.add(build_mesh(&buffers));
+        // fill 与 stroke 可以兼得，但我懒了()
+        if let Some(mode) = maybe_fill_mode {
+            *material = gradients.add(GradientMaterial {
+                uniform: mode.brush.clone_as_uniform(),
+            })
+        }
+        else if let Some(mode) = maybe_stroke_mode {
+            *material = gradients.add(GradientMaterial {
+                uniform: mode.brush.clone_as_uniform(),
+            })
+        }
     }
 }
 
@@ -147,14 +162,6 @@ fn build_mesh(buffers: &VertexBuffers) -> Mesh {
                 [v.position[0], v.position[1], 0.0]
             })
             .collect::<Vec<[f32; 3]>>(),
-    );
-    mesh.insert_attribute(
-        Mesh::ATTRIBUTE_COLOR,
-        buffers
-            .vertices
-            .iter()
-            .map(|v| v.color)
-            .collect::<Vec<[f32; 4]>>(),
     );
 
     mesh
