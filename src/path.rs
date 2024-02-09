@@ -118,6 +118,10 @@ impl PathBuilder {
         Self(Builder::with_capacity(n,0).with_svg())
     }
 
+    pub fn reserve(&mut self,n:usize) {
+        self.0.reserve(n, 0);
+    }
+
     /// Returns a finalized [`Path`].
     #[must_use]
     pub fn build(self) -> Path {
