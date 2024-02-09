@@ -112,6 +112,12 @@ impl PathBuilder {
         Self(Builder::new().with_svg())
     }
 
+    /// Returns a new, empty `PathBuilder`, with capacity `n`.
+    #[must_use]
+    pub fn with_capacity(n: usize) -> Self {
+        Self(Builder::with_capacity(n,0).with_svg())
+    }
+
     /// Returns a finalized [`Path`].
     #[must_use]
     pub fn build(self) -> Path {
