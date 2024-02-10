@@ -1,6 +1,6 @@
 #import bevy_sprite::mesh2d_functions as mesh_functions
-#import bevy_sprite::mesh2d_bindings       mesh
-#import bevy_sprite::mesh2d_view_bindings  view
+#import bevy_sprite::mesh2d_bindings::mesh
+#import bevy_sprite::mesh2d_view_bindings::view
 #ifdef TONEMAP_IN_SHADER
 #import bevy_core_pipeline::tonemapping
 #endif

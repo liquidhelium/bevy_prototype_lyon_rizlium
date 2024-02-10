@@ -2,7 +2,7 @@
 
 use bevy::{
     ecs::{bundle::Bundle, component::Component},
-    prelude::{ComputedVisibility, GlobalTransform, Handle, Transform, Visibility},
+    prelude::{ViewVisibility, GlobalTransform, Handle, Transform, Visibility},
     render::primitives::Aabb,
     sprite::Mesh2dHandle,
 };
@@ -21,7 +21,7 @@ pub struct ShapeBundle {
     pub transform: Transform,
     pub global_transform: GlobalTransform,
     pub visibility: Visibility,
-    pub computed_visibility: ComputedVisibility,
+    pub computed_visibility: ViewVisibility,
 }
 
 #[derive(Bundle)]
@@ -52,7 +52,7 @@ impl Default for ShapeBundle {
             transform: Transform::default(),
             global_transform: GlobalTransform::default(),
             visibility: Visibility::default(),
-            computed_visibility: ComputedVisibility::default(),
+            computed_visibility: ViewVisibility::default(),
         }
     }
 }
