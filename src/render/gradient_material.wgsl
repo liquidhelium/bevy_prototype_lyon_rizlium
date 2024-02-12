@@ -1,6 +1,7 @@
-#import bevy_sprite::mesh2d_functions as mesh_functions
-#import bevy_sprite::mesh2d_bindings::mesh
-#import bevy_sprite::mesh2d_view_bindings::view
+#import bevy_sprite::{
+    mesh2d_functions as mesh_functions,
+    mesh2d_view_bindings::view,
+}
 #ifdef TONEMAP_IN_SHADER
 #import bevy_core_pipeline::tonemapping
 #endif
@@ -69,20 +70,21 @@ fn vertex(vertex: Vertex) -> VertexOutput {
 #endif
 
 #ifdef VERTEX_POSITIONS
+    var model = mesh_functions::get_model_matrix(vertex.instance_index);
     out.world_position = mesh_functions::mesh2d_position_local_to_world(
-        mesh.model,
+        model,
         vec4<f32>(vertex.position, 1.0)
     );
     out.position = mesh_functions::mesh2d_position_world_to_clip(out.world_position);
 #endif
 
 #ifdef VERTEX_NORMALS
-    out.world_normal = mesh_functions::mesh2d_normal_local_to_world(vertex.normal);
+    out.world_normal = mesh_functions::mesh2d_normal_local_to_world(vertex.normal, vertex.instance_index);
 #endif
 
 #ifdef VERTEX_TANGENTS
     out.world_tangent = mesh_functions::mesh2d_tangent_local_to_world(
-        mesh.model,
+        model,
         vertex.tangent
     );
 #endif
