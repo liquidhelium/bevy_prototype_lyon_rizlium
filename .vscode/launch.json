@@ -1,0 +1,212 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'bevy_prototype_lyon'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=bevy_prototype_lyon"
+                ],
+                "filter": {
+                    "name": "bevy_prototype_lyon",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'rounded_polygon'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=rounded_polygon",
+                    "--package=bevy_prototype_lyon"
+                ],
+                "filter": {
+                    "name": "rounded_polygon",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'rounded_polygon'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=rounded_polygon",
+                    "--package=bevy_prototype_lyon"
+                ],
+                "filter": {
+                    "name": "rounded_polygon",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'svg'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=svg",
+                    "--package=bevy_prototype_lyon"
+                ],
+                "filter": {
+                    "name": "svg",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'svg'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=svg",
+                    "--package=bevy_prototype_lyon"
+                ],
+                "filter": {
+                    "name": "svg",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'readme'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=readme",
+                    "--package=bevy_prototype_lyon"
+                ],
+                "filter": {
+                    "name": "readme",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'readme'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=readme",
+                    "--package=bevy_prototype_lyon"
+                ],
+                "filter": {
+                    "name": "readme",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'path'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=path",
+                    "--package=bevy_prototype_lyon"
+                ],
+                "filter": {
+                    "name": "path",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'path'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=path",
+                    "--package=bevy_prototype_lyon"
+                ],
+                "filter": {
+                    "name": "path",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'dynamic_shape'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=dynamic_shape",
+                    "--package=bevy_prototype_lyon"
+                ],
+                "filter": {
+                    "name": "dynamic_shape",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'dynamic_shape'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=dynamic_shape",
+                    "--package=bevy_prototype_lyon"
+                ],
+                "filter": {
+                    "name": "dynamic_shape",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
