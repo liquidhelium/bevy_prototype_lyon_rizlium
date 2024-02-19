@@ -13,7 +13,7 @@ struct GradientMaterialUniform {
     end_pos: vec2<f32>, 
 }
 
-@group(1) @binding(0) var<uniform> material: GradientMaterialUniform;
+@group(2) @binding(0) var<uniform> material: GradientMaterialUniform;
 
 fn invlerp_points(pos1: vec2<f32>, pos2: vec2<f32>, pos: vec2<f32>) -> f32 {
     let pointing_vec = pos2 - pos1;
