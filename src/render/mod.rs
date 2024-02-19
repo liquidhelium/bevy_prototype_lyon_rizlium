@@ -3,7 +3,7 @@
 use bevy::{
     asset::{load_internal_asset, AssetApp},
     prelude::{App, Asset, Assets, Handle, Plugin, Shader, Vec2},
-    reflect::{prelude::*, TypeUuid},
+    reflect::prelude::*,
     render::{color::Color, render_resource::{AsBindGroup, ShaderRef, ShaderType}},
     sprite::{Material2d, Material2dPlugin},
 };
