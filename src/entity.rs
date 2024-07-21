@@ -2,7 +2,7 @@
 
 use bevy::{
     ecs::{bundle::Bundle, component::Component},
-    prelude::{GlobalTransform, Handle, SpatialBundle, Transform, ViewVisibility, Visibility},
+    prelude::{GlobalTransform, Handle, Transform, ViewVisibility, Visibility},
     render::{primitives::Aabb, view::InheritedVisibility},
     sprite::Mesh2dHandle, utils::default,
 };

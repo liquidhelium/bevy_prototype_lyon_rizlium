@@ -1,9 +1,8 @@
-use bevy::prelude::Vec2;
 use lyon_tessellation::{
     self as tess, FillVertex, FillVertexConstructor, StrokeVertex, StrokeVertexConstructor,
 };
 
-use crate::brush::{Brush, Brusher};
+use crate::brush::{Brush};
 
 /// The index type of a Bevy [`Mesh`](bevy::render::mesh::Mesh).
 type IndexType = u32;

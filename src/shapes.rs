@@ -39,21 +39,15 @@ impl Default for RectangleOrigin {
 
 #[allow(missing_docs)]
 #[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Default)]
 pub struct Rectangle {
     pub rect: Rect,
 }
 
 impl Rectangle {
-    pub fn new(rect: Rect) -> Self { Self { rect } }
+    #[must_use] pub fn new(rect: Rect) -> Self { Self { rect } }
 }
 
-impl Default for Rectangle {
-    fn default() -> Self {
-        Self {
-            rect: Rect::default()
-        }
-    }
-}
 
 impl Geometry for Rectangle {
     fn add_geometry(&self, b: &mut Builder) {

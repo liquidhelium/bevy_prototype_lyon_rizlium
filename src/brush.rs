@@ -23,31 +23,29 @@ pub enum Brush {
 }
 
 impl Brush {
-    pub fn clone_as_uniform(&self) -> GradientMaterialUniform {
+    #[must_use] pub fn clone_as_uniform(&self) -> GradientMaterialUniform {
         match self {
             Self::Color(color) => GradientMaterialUniform {
-                start: color.clone().into(),
-                end: color.clone().into(),
+                start: (*color).into(),
+                end: (*color).into(),
                 ..default()
             },
             Self::Gradient(Gradient::Linear(ref linear)) => {
                 let start = linear
                     .stops
                     .first()
-                    .cloned()
-                    .map(|o| o.color)
-                    .unwrap_or(Color::BLACK);
+                    .copied()
+                    .map_or(Color::BLACK, |o| o.color);
                 let end = linear
                     .stops
                     .last()
-                    .cloned()
-                    .map(|o| o.color)
-                    .unwrap_or(Color::BLACK);
+                    .copied()
+                    .map_or(Color::BLACK, |o| o.color);
                 let start_pos = linear.start;
                 let end_pos = linear.end;
                 GradientMaterialUniform {
                     start: start.into(),
-                    end: start.into(),
+                    end: end.into(),
                     start_pos,
                     end_pos,
                 }
@@ -90,15 +88,15 @@ impl Brusher for Gradient {
     }
 }
 
-impl Into<Brush> for Color {
-    fn into(self) -> Brush {
-        Brush::Color(self)
+impl From<Color> for Brush {
+    fn from(val: Color) -> Self {
+        Brush::Color(val)
     }
 }
 
-impl Into<Brush> for Gradient {
-    fn into(self) -> Brush {
-        Brush::Gradient(self)
+impl From<Gradient> for Brush {
+    fn from(val: Gradient) -> Self {
+        Brush::Gradient(val)
     }
 }
 
@@ -108,9 +106,9 @@ pub enum Gradient {
     Linear(LinearGradient),
 }
 
-impl Into<Gradient> for LinearGradient {
-    fn into(self) -> Gradient {
-        Gradient::Linear(self)
+impl From<LinearGradient> for Gradient {
+    fn from(val: LinearGradient) -> Self {
+        Gradient::Linear(val)
     }
 }
 #[derive(Default, Debug, Clone, PartialEq, Reflect)]
@@ -122,7 +120,7 @@ pub struct LinearGradient {
 }
 
 impl LinearGradient {
-    pub fn new_empty(start: Vec2, end: Vec2) -> Self {
+    #[must_use] pub fn new_empty(start: Vec2, end: Vec2) -> Self {
         Self {
             start,
             end,
@@ -131,7 +129,7 @@ impl LinearGradient {
     }
 
     pub fn add_stop(&mut self, offset: f32, color: Color) {
-        self.stops.push(GradientStop::new(offset, color))
+        self.stops.push(GradientStop::new(offset, color));
     }
 
     fn progress(&self, pos: Vec2) -> f32 {
@@ -140,7 +138,7 @@ impl LinearGradient {
         let posing_vec = pos - self.start;
         if !length.approx_eq(&0.) {
             let product = vec.dot(posing_vec);
-            return product / (length * length);
+            product / (length * length)
         } else {
             0.
         }
@@ -166,12 +164,10 @@ impl Ord for NonNan {
 impl Brusher for LinearGradient {
     fn brush(&self, pos: Vec2) -> Color {
         if self.stops.len() <= 1 {
-            return self.stops.get(0).map(|i| i.color).unwrap_or(Color::NONE);
+            return self.stops.first().map_or(Color::NONE, |i| i.color);
         }
-        if self.stops.len() == 2 {
-            if self.stops[0] == self.stops[1] {
-                return self.stops[0].color;
-            }
+        if self.stops.len() == 2 && self.stops[0] == self.stops[1] {
+            return self.stops[0].color;
         }
         let progress = NonNan::new_checked(self.progress(pos).clamp(0., 1.)).unwrap();
         let (Ok(index) | Err(index)) = self
@@ -208,7 +204,7 @@ pub struct GradientStop {
 }
 
 impl GradientStop {
-    pub fn new(offset: f32, color: Color) -> Self {
+    #[must_use] pub fn new(offset: f32, color: Color) -> Self {
         Self { offset, color }
     }
 }

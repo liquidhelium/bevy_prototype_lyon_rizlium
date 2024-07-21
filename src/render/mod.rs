@@ -1,7 +1,7 @@
 //! Render plugin
 
 use bevy::{
-    asset::{load_internal_asset, AssetApp, AssetId}, color::{Color, LinearRgba}, prelude::{App, Asset, Assets, Handle, Plugin, Shader, Vec2}, reflect::prelude::*, render::render_resource::{AsBindGroup, ShaderRef, ShaderType}, sprite::{Material2d, Material2dPlugin}
+    asset::{load_internal_asset, AssetApp, AssetId}, color::{LinearRgba}, prelude::{App, Asset, Assets, Handle, Plugin, Shader, Vec2}, reflect::prelude::*, render::render_resource::{AsBindGroup, ShaderRef, ShaderType}, sprite::{Material2d, Material2dPlugin}
 };
 
 /// Handle to the custom shader with a unique random ID

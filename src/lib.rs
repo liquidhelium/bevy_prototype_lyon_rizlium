@@ -14,7 +14,7 @@
 // #![warn(missing_docs, rust_2018_idioms, unused)]
 #![allow(elided_lifetimes_in_paths)]
 // clippy
-#![warn(clippy::all, clippy::pedantic, clippy::nursery, clippy::cargo)]
+#![warn(clippy::all, clippy::pedantic, clippy::cargo)]
 #![allow(clippy::cast_precision_loss)]
 #![allow(clippy::cast_possible_truncation)]
 #![allow(clippy::multiple_crate_versions)] // this is a dependency problem
