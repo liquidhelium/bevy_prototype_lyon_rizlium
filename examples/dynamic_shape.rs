@@ -2,6 +2,7 @@ use std::f64::consts::PI;
 
 use bevy::prelude::*;
 use bevy_prototype_lyon::{entity::ShapeBundle, prelude::*};
+use bevy::color::palettes::css::*;
 
 fn main() {
     App::new()
@@ -63,8 +64,8 @@ fn setup_system(mut commands: Commands) {
             path: GeometryBuilder::build_as(&shape),
             ..default()
         },
-        Fill::brush(Color::CYAN),
-        Stroke::new(Color::BLACK, 10.0),
+        Fill::brush(Color::from(CORAL)),
+        Stroke::new(Color::from(BLACK), 10.0),
         ExampleShape,
     ));
 }

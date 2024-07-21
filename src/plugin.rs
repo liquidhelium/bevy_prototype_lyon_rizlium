@@ -25,6 +25,7 @@ use bevy::{
         mesh::{Indices, Mesh}, render_asset::RenderAssetUsages, render_resource::PrimitiveTopology
     },
     sprite::Mesh2dHandle,
+    color::palettes::css::FUCHSIA
 };
 use lyon_tessellation::{self as tess, BuffersBuilder};
 
@@ -96,7 +97,7 @@ fn mesh_shapes_system(
             fill(
                 &mut fill_tess,
                 &path.0,
-                &Fill::brush(Color::FUCHSIA),
+                &Fill::brush(Color::from(FUCHSIA)),
                 &mut buffers,
             );
         }
@@ -106,12 +107,12 @@ fn mesh_shapes_system(
         if let Some(mode) = maybe_fill_mode {
             *material = gradients.add(GradientMaterial {
                 uniform: mode.brush.clone_as_uniform(),
-            })
+            });
         }
         else if let Some(mode) = maybe_stroke_mode {
             *material = gradients.add(GradientMaterial {
                 uniform: mode.brush.clone_as_uniform(),
-            })
+            });
         }
     }
 }

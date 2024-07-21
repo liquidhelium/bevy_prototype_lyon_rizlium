@@ -1,6 +1,6 @@
 //! Types for defining shape color and options.
 
-use bevy::{ecs::component::Component, render::color::Color, reflect::Reflect, prelude::ReflectComponent};
+use bevy::{ecs::component::Component, color::Color, reflect::Reflect, prelude::ReflectComponent};
 use lyon_tessellation::{FillOptions, StrokeOptions};
 
 use crate::brush::Brush;

@@ -1,11 +1,7 @@
 //! Render plugin
 
 use bevy::{
-    asset::{load_internal_asset, AssetApp},
-    prelude::{App, Asset, Assets, Handle, Plugin, Shader, Vec2},
-    reflect::prelude::*,
-    render::{color::Color, render_resource::{AsBindGroup, ShaderRef, ShaderType}},
-    sprite::{Material2d, Material2dPlugin},
+    asset::{load_internal_asset, AssetApp, AssetId}, color::{Color, LinearRgba}, prelude::{App, Asset, Assets, Handle, Plugin, Shader, Vec2}, reflect::prelude::*, render::render_resource::{AsBindGroup, ShaderRef, ShaderType}, sprite::{Material2d, Material2dPlugin}
 };
 
 /// Handle to the custom shader with a unique random ID
@@ -27,9 +23,9 @@ impl Plugin for GradientMaterialPlugin {
         app.add_plugins(Material2dPlugin::<GradientMaterial>::default())
             .register_asset_reflect::<GradientMaterial>();
 
-        app.world
+        app.world_mut()
             .resource_mut::<Assets<GradientMaterial>>()
-            .insert(Handle::<GradientMaterial>::default(), GradientMaterial::default());
+            .insert(AssetId::<GradientMaterial>::default(), GradientMaterial::default());
     }
 }
 
@@ -52,8 +48,8 @@ pub struct GradientMaterial {
 
 #[derive(ShaderType, Reflect, Default, Debug, Clone, Copy)]
 pub struct GradientMaterialUniform {
-    pub start: Color,
-    pub end: Color,
+    pub start: LinearRgba,
+    pub end: LinearRgba,
     pub start_pos: Vec2,
     pub end_pos: Vec2
 }

@@ -1,4 +1,4 @@
-use bevy::{math::Vec2, prelude::default, reflect::Reflect, render::color::Color};
+use bevy::{color::{Color, ColorToComponents, LinearRgba}, math::Vec2, prelude::default, reflect::Reflect};
 use lyon_algorithms::geom::euclid::approxeq::ApproxEq;
 
 use crate::render::GradientMaterialUniform;
@@ -26,8 +26,8 @@ impl Brush {
     pub fn clone_as_uniform(&self) -> GradientMaterialUniform {
         match self {
             Self::Color(color) => GradientMaterialUniform {
-                start: color.clone(),
-                end: color.clone(),
+                start: color.clone().into(),
+                end: color.clone().into(),
                 ..default()
             },
             Self::Gradient(Gradient::Linear(ref linear)) => {
@@ -46,8 +46,8 @@ impl Brush {
                 let start_pos = linear.start;
                 let end_pos = linear.end;
                 GradientMaterialUniform {
-                    start,
-                    end,
+                    start: start.into(),
+                    end: start.into(),
                     start_pos,
                     end_pos,
                 }
@@ -184,19 +184,19 @@ impl Brusher for LinearGradient {
         if t.is_nan() {
             t = 0.;
         }
-        let color1 = former.color.as_linear_rgba_f32();
-        let color2 = latter.color.as_linear_rgba_f32();
+        let color1 = LinearRgba::from(former.color).to_f32_array();
+        let color2 = LinearRgba::from(latter.color).to_f32_array();
         let lerp: Vec<_> = color1
             .into_iter()
             .zip(color2)
             .map(|(a, b)| t * (b - a) + a)
             .collect();
-        Color::RgbaLinear {
+        LinearRgba {
             red: lerp[0],
             green: lerp[1],
             blue: lerp[2],
             alpha: lerp[3],
-        }
+        }.into()
     }
 }
 
