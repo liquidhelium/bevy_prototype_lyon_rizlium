@@ -103,7 +103,7 @@ fn mesh_shapes_system(
         }
 
         mesh.0 = meshes.add(build_mesh(&buffers));
-        // fill 与 stroke 可以兼得，但我懒了()
+        // fill 与 stroke 可以兼得，但我懒了() 
         if let Some(mode) = maybe_fill_mode {
             *material = gradients.add(GradientMaterial {
                 uniform: mode.brush.clone_as_uniform(),
