@@ -150,7 +150,7 @@ fn stroke(
 }
 
 fn build_mesh(buffers: &VertexBuffers) -> Mesh {
-    let mut mesh = Mesh::new(PrimitiveTopology::TriangleList, RenderAssetUsages::RENDER_WORLD);
+    let mut mesh = Mesh::new(PrimitiveTopology::TriangleList, RenderAssetUsages::default());
     mesh.insert_indices(Indices::U32(buffers.indices.clone()));
     mesh.insert_attribute(
         Mesh::ATTRIBUTE_POSITION,
