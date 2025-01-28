@@ -12,20 +12,13 @@
 //! `ShapeBundle`.
 
 use bevy::{
-    app::{App, Plugin},
-    asset::{Assets, Handle},
-    ecs::{
+    app::{App, Plugin}, asset::{Assets, Handle}, color::palettes::css::FUCHSIA, ecs::{
         query::{Changed, Or}, schedule::IntoSystemSetConfigs, system::{Query, ResMut, Resource}
-    },
-    log::error,
-    prelude::{
+    }, log::error, prelude::{
         Color, Deref, DerefMut, IntoSystemConfigs, PostUpdate, SystemSet,
-    },
-    render::{
-        mesh::{Indices, Mesh}, render_asset::RenderAssetUsages, render_resource::PrimitiveTopology
-    },
-    sprite::Mesh2dHandle,
-    color::palettes::css::FUCHSIA
+    }, render::{
+        mesh::{Indices, Mesh, Mesh2d}, render_asset::RenderAssetUsages, render_resource::PrimitiveTopology
+    }, sprite::MeshMaterial2d
 };
 use lyon_tessellation::{self as tess, BuffersBuilder};
 
@@ -76,8 +69,8 @@ fn mesh_shapes_system(
             Option<&Fill>,
             Option<&Stroke>,
             &Path,
-            &mut Mesh2dHandle,
-            &mut Handle<GradientMaterial>,
+            &mut Mesh2d,
+            &mut MeshMaterial2d<GradientMaterial>,
         ),
         Or<(Changed<Path>, Changed<Fill>, Changed<Stroke>)>,
     >,
@@ -105,14 +98,14 @@ fn mesh_shapes_system(
         mesh.0 = meshes.add(build_mesh(&buffers));
         // fill 与 stroke 可以兼得，但我懒了() 
         if let Some(mode) = maybe_fill_mode {
-            *material = gradients.add(GradientMaterial {
+            *material = bevy::prelude::MeshMaterial2d(gradients.add(GradientMaterial {
                 uniform: mode.brush.clone_as_uniform(),
-            });
+            }));
         }
         else if let Some(mode) = maybe_stroke_mode {
-            *material = gradients.add(GradientMaterial {
+            *material = bevy::prelude::MeshMaterial2d(gradients.add(GradientMaterial {
                 uniform: mode.brush.clone_as_uniform(),
-            });
+            }));
         }
     }
 }

@@ -3,8 +3,9 @@
 use bevy::{
     ecs::{bundle::Bundle, component::Component},
     prelude::{GlobalTransform, Handle, Transform, ViewVisibility, Visibility},
-    render::{primitives::Aabb, view::InheritedVisibility},
-    sprite::Mesh2dHandle, utils::default,
+    render::{mesh::Mesh2d, primitives::Aabb, view::InheritedVisibility},
+    sprite::MeshMaterial2d,
+    utils::default,
 };
 use lyon_tessellation::{self as tess};
 
@@ -15,9 +16,9 @@ use crate::{prelude::Geometry, render::GradientMaterial};
 #[derive(Bundle)]
 pub struct ShapeBundle {
     pub path: Path,
-    pub mesh: Mesh2dHandle,
+    pub mesh: Mesh2d,
     pub aabb: Aabb,
-    pub material: Handle<GradientMaterial>,
+    pub material: MeshMaterial2d<GradientMaterial>,
     pub transform: Transform,
     pub global_transform: GlobalTransform,
     pub visibility: Visibility,
@@ -29,16 +30,16 @@ pub struct ShapeBundle {
 #[derive(Bundle)]
 pub struct SimpleShapeBundle {
     pub path: Path,
-    pub mesh: Mesh2dHandle,
-    pub material: Handle<GradientMaterial>,
+    pub mesh: Mesh2d,
+    pub material: MeshMaterial2d<GradientMaterial>,
     pub visibility: Visibility,
 }
 impl Default for SimpleShapeBundle {
     fn default() -> Self {
         Self {
             path: Path(tess::path::Path::new()),
-            mesh: Mesh2dHandle::default(),
-            material: Handle::<GradientMaterial>::default(),
+            mesh: Mesh2d::default(),
+            material: MeshMaterial2d::<GradientMaterial>::default(),
             visibility: Visibility::Visible,
         }
     }
@@ -48,14 +49,14 @@ impl Default for ShapeBundle {
     fn default() -> Self {
         Self {
             path: Path(tess::path::Path::new()),
-            mesh: Mesh2dHandle::default(),
+            mesh: Mesh2d::default(),
             aabb: Aabb::default(),
-            material: Handle::<GradientMaterial>::default(),
+            material: MeshMaterial2d::<GradientMaterial>::default(),
             transform: Transform::default(),
             global_transform: GlobalTransform::default(),
             visibility: Visibility::default(),
             computed_visibility: ViewVisibility::default(),
-            inherited_visibility: default()
+            inherited_visibility: default(),
         }
     }
 }
