@@ -1,7 +1,20 @@
 //! Render plugin
 
 use bevy::{
-    asset::{load_internal_asset, AssetApp, AssetId}, color::{LinearRgba}, prelude::{App, Asset, Assets, Handle, Plugin, Shader, Vec2}, reflect::prelude::*, render::render_resource::{AsBindGroup, ShaderRef, ShaderType}, sprite::{Material2d, Material2dPlugin}
+    asset::{load_internal_asset, AssetApp, AssetId},
+    color::LinearRgba,
+    image::BevyDefault as _,
+    prelude::{App, Asset, Assets, Handle, Plugin, Shader, Vec2},
+    reflect::prelude::*,
+    render::{
+        mesh::{MeshVertexBufferLayout, MeshVertexBufferLayoutRef},
+        render_resource::{
+            AsBindGroup, BlendComponent, BlendFactor, BlendOperation, BlendState, ColorTargetState,
+            ColorWrites, RenderPipelineDescriptor, ShaderRef, ShaderType,
+            SpecializedMeshPipelineError, TextureFormat,
+        },
+    },
+    sprite::{ColorMaterial, Material2d, Material2dKey, Material2dPlugin},
 };
 
 /// Handle to the custom shader with a unique random ID
@@ -25,7 +38,10 @@ impl Plugin for GradientMaterialPlugin {
 
         app.world_mut()
             .resource_mut::<Assets<GradientMaterial>>()
-            .insert(AssetId::<GradientMaterial>::default(), GradientMaterial::default());
+            .insert(
+                AssetId::<GradientMaterial>::default(),
+                GradientMaterial::default(),
+            );
     }
 }
 
@@ -33,8 +49,13 @@ impl Material2d for GradientMaterial {
     fn fragment_shader() -> ShaderRef {
         GRADIENT_MATERIAL_SHADER_HANDLE.into()
     }
+
     fn vertex_shader() -> ShaderRef {
         GRADIENT_MATERIAL_SHADER_HANDLE.into()
+    }
+
+    fn alpha_mode(&self) -> bevy::sprite::AlphaMode2d {
+        bevy::sprite::AlphaMode2d::Blend
     }
 }
 
@@ -51,5 +72,5 @@ pub struct GradientMaterialUniform {
     pub start: LinearRgba,
     pub end: LinearRgba,
     pub start_pos: Vec2,
-    pub end_pos: Vec2
+    pub end_pos: Vec2,
 }
