@@ -58,7 +58,7 @@ fn setup_system(mut commands: Commands) {
         ..shapes::RegularPolygon::default()
     };
 
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn(Camera2d);
     commands.spawn((
         ShapeBundle {
             path: GeometryBuilder::build_as(&shape),

@@ -19,7 +19,7 @@ use bevy::{
 
 /// Handle to the custom shader with a unique random ID
 pub const GRADIENT_MATERIAL_SHADER_HANDLE: Handle<Shader> =
-    Handle::weak_from_u128(3_191_283_017_262_752_456);
+    bevy::asset::weak_handle!("00000000-0000-0000-0000-000000000001");
 
 /// Plugin that provides a custom material for rendering [`Shape`]s
 pub struct GradientMaterialPlugin;

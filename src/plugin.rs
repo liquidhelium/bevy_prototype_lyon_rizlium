@@ -13,9 +13,9 @@
 
 use bevy::{
     app::{App, Plugin}, asset::{Assets, Handle}, color::palettes::css::FUCHSIA, ecs::{
-        query::{Changed, Or}, schedule::IntoSystemSetConfigs, system::{Query, ResMut, Resource}
-    }, log::error, prelude::{
-        Color, Deref, DerefMut, IntoSystemConfigs, PostUpdate, SystemSet,
+        query::{Changed, Or}, schedule::IntoScheduleConfigs as _, system::{Query, ResMut}
+    }, log, prelude::{
+        Color, Deref, DerefMut, PostUpdate, Resource, SystemSet
     }, render::{
         mesh::{Indices, Mesh, Mesh2d}, render_asset::RenderAssetUsages, render_resource::PrimitiveTopology
     }, sprite::MeshMaterial2d
@@ -38,7 +38,7 @@ impl Plugin for ShapePlugin {
             .insert_resource(StrokeTessellator(stroke_tess))
             .configure_sets(
                 PostUpdate,
-                (BuildShapes,).after(bevy::transform::TransformSystem::TransformPropagate),
+                BuildShapes.after(bevy::transform::TransformSystem::TransformPropagate),
             )
             .add_systems(PostUpdate, mesh_shapes_system.in_set(BuildShapes))
             .add_plugins(GradientMaterialPlugin)
@@ -122,7 +122,7 @@ fn fill(
         &mode.options,
         &mut BuffersBuilder::new(buffers, VertexConstructor { brush: &mode.brush }),
     ) {
-        error!("FillTessellator error: {:?}", e);
+        log::error!("FillTessellator error: {:?}", e);
     }
 }
 
@@ -138,7 +138,7 @@ fn stroke(
         &mode.options,
         &mut BuffersBuilder::new(buffers, VertexConstructor { brush: &mode.brush }),
     ) {
-        error!("StrokeTessellator error: {:?}", e);
+        log::error!("StrokeTessellator error: {:?}", e);
     }
 }
 
