@@ -16,6 +16,7 @@ use bevy::{
     },
     sprite::{ColorMaterial, Material2d, Material2dKey, Material2dPlugin},
 };
+use lyon_algorithms::geom::euclid::approxeq::ApproxEq;
 
 /// Handle to the custom shader with a unique random ID
 pub const GRADIENT_MATERIAL_SHADER_HANDLE: Handle<Shader> =
@@ -55,7 +56,13 @@ impl Material2d for GradientMaterial {
     }
 
     fn alpha_mode(&self) -> bevy::sprite::AlphaMode2d {
-        bevy::sprite::AlphaMode2d::Blend
+        if self.uniform.start.alpha.approx_eq_eps(&1.0, &0.01)
+            && self.uniform.end.alpha.approx_eq_eps(&1.0, &0.01)
+        {
+            bevy::sprite::AlphaMode2d::Opaque
+        } else {
+            bevy::sprite::AlphaMode2d::Blend
+        }
     }
 }
 
