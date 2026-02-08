@@ -70,8 +70,7 @@ impl GeometryBuilder {
     /// fn my_system(mut commands: Commands) {
     ///     let line = shapes::Line(Vec2::ZERO, Vec2::new(10.0, 0.0));
     ///     let square = shapes::Rectangle {
-    ///         extents: Vec2::splat(100.0),
-    ///         ..shapes::Rectangle::default()
+    ///         rect: Rect::from_center_size(Vec2::ZERO, Vec2::splat(100.0)),
     ///     };
     ///     let mut builder = GeometryBuilder::new().add(&line).add(&square);
     ///
@@ -80,8 +79,8 @@ impl GeometryBuilder {
     ///             path: builder.build(),
     ///             ..default()
     ///         },
-    ///         Fill::color(Color::ORANGE_RED),
-    ///         Stroke::new(Color::ORANGE_RED, 10.0),
+    ///         Fill::brush(Color::srgb(1.0, 0.27, 0.0)),
+    ///         Stroke::new(Color::srgb(1.0, 0.27, 0.0), 10.0),
     ///     ));
     /// }
     /// # bevy::ecs::system::assert_is_system(my_system);
@@ -115,7 +114,7 @@ impl GeometryBuilder {
     ///             path: GeometryBuilder::build_as(&line),
     ///             ..default()
     ///         },
-    ///         Fill::color(Color::ORANGE_RED),
+    ///         Fill::brush(Color::srgb(1.0, 0.27, 0.0)),
     ///     ));
     /// }
     /// # bevy::ecs::system::assert_is_system(my_system);

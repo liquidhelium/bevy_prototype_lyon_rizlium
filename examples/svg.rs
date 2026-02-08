@@ -4,7 +4,6 @@ use bevy_prototype_lyon::prelude::*;
 fn main() {
     App::new()
         //Added msaa to reduce aliasing
-        .insert_resource(Msaa::Sample4)
         .add_plugins(DefaultPlugins)
         .add_plugins(ShapePlugin)
         .add_systems(Startup, setup_system)
@@ -20,18 +19,30 @@ struct BlacksmithMarker;
 #[derive(Component)]
 struct ToolShackMarker;
 
+fn spatial_components(transform: Transform) -> (
+    Transform,
+    GlobalTransform,
+    Visibility,
+    InheritedVisibility,
+    ViewVisibility,
+) {
+    (
+        transform,
+        GlobalTransform::default(),
+        Visibility::default(),
+        InheritedVisibility::default(),
+        ViewVisibility::default(),
+    )
+}
+
 fn setup_system(mut commands: Commands) {
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn(Camera2d);
 
     commands
-        .spawn((
-            Name("Blacksmith".to_owned()),
-            BlacksmithMarker,
-            SpatialBundle {
-                transform: Transform::from_translation(Vec3::new(-50., 0., 0.)),
-                ..default()
-            },
-        ))
+        .spawn((Name("Blacksmith".to_owned()), BlacksmithMarker))
+        .insert(spatial_components(Transform::from_translation(
+            Vec3::new(-50., 0., 0.),
+        )))
         //we split our art in this example to two children because our art is made out of 2 paths,
         //one path who's width is 4,
         //and another whose width is 2.5
@@ -61,18 +72,12 @@ fn setup_system(mut commands: Commands) {
         });
 
     commands
-        .spawn((
-            Name("Shack".to_owned()),
-            ToolShackMarker,
-            SpatialBundle {
-                transform: Transform {
-                    translation: Vec3::new(375., 0., 0.),
-                    scale: Vec3::new(0.1, 0.1, 1.),
-                    ..Default::default()
-                },
-                ..default()
-            },
-        ))
+        .spawn((Name("Shack".to_owned()), ToolShackMarker))
+        .insert(spatial_components(Transform {
+            translation: Vec3::new(375., 0., 0.),
+            scale: Vec3::new(0.1, 0.1, 1.),
+            ..Default::default()
+        }))
         //we split our art in this example to two children because our art is made out of 2 paths,
         //one path who's width is 4,
         //and another whose width is 2.5

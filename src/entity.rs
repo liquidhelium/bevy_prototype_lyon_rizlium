@@ -2,9 +2,10 @@
 
 use bevy::{
     ecs::{bundle::Bundle, component::Component},
-    prelude::{GlobalTransform, Handle, Transform, ViewVisibility, Visibility},
-    render::{mesh::Mesh2d, primitives::Aabb, view::InheritedVisibility},
-    sprite::MeshMaterial2d,
+    prelude::{
+        GlobalTransform, InheritedVisibility, Mesh2d, MeshMaterial2d, Transform, ViewVisibility,
+        Visibility,
+    },
     utils::default,
 };
 use lyon_tessellation::{self as tess};
@@ -17,7 +18,6 @@ use crate::{prelude::Geometry, render::GradientMaterial};
 pub struct ShapeBundle {
     pub path: Path,
     pub mesh: Mesh2d,
-    pub aabb: Aabb,
     pub material: MeshMaterial2d<GradientMaterial>,
     pub transform: Transform,
     pub global_transform: GlobalTransform,
@@ -50,7 +50,6 @@ impl Default for ShapeBundle {
         Self {
             path: Path(tess::path::Path::new()),
             mesh: Mesh2d::default(),
-            aabb: Aabb::default(),
             material: MeshMaterial2d::<GradientMaterial>::default(),
             transform: Transform::default(),
             global_transform: GlobalTransform::default(),

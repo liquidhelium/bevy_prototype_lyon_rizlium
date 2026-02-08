@@ -6,7 +6,6 @@ use bevy_prototype_lyon::prelude::*;
 
 fn main() {
     App::new()
-        .insert_resource(Msaa::Sample4)
         .add_plugins(DefaultPlugins)
         .add_plugins(ShapePlugin)
         .add_systems(Startup, setup_system)
@@ -20,13 +19,13 @@ fn setup_system(mut commands: Commands) {
         ..shapes::RegularPolygon::default()
     };
 
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn(Camera2d);
     commands.spawn((
         ShapeBundle {
             path: GeometryBuilder::build_as(&shape),
             ..default()
         },
-        Fill::brush(Color::CYAN),
-        Stroke::new(Color::BLACK, 10.0),
+        Fill::brush(Color::srgb(0.0, 1.0, 1.0)),
+        Stroke::new(Color::from(bevy::color::palettes::css::BLACK), 10.0),
     ));
 }

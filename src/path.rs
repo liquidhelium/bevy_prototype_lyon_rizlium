@@ -34,26 +34,25 @@ impl ShapePath {
     /// # use bevy::prelude::*;
     /// # use bevy_prototype_lyon::prelude::*;
     /// #
-    /// # #[derive(Component)]
-    /// # struct Player;
-    /// #
-    /// fn my_system(mut query: Query<&mut Path, With<Player>>) {
-    ///     let mut path = query.single_mut();
-    ///
-    ///     let square = shapes::Rectangle {
-    ///         extents: Vec2::splat(50.0),
-    ///         ..shapes::Rectangle::default()
-    ///     };
-    ///     let triangle = RegularPolygon {
-    ///         sides: 3,
-    ///         center: Vec2::new(100.0, 0.0),
-    ///         ..RegularPolygon::default()
-    ///     };
-    ///
-    ///     *path = ShapePath::new().add(&square).add(&triangle).build();
-    /// }
-    /// # bevy::ecs::system::assert_is_system(my_system);
-    /// ```
+/// # #[derive(Component)]
+/// # struct Player;
+/// #
+/// fn my_system(mut query: Query<&mut Path, With<Player>>) {
+///     if let Some(mut path) = query.iter_mut().next() {
+///         let square = shapes::Rectangle {
+///             rect: Rect::from_center_size(Vec2::ZERO, Vec2::splat(50.0)),
+///         };
+///         let triangle = shapes::RegularPolygon {
+///             sides: 3,
+///             center: Vec2::new(100.0, 0.0),
+///             ..shapes::RegularPolygon::default()
+///         };
+///
+///         *path = ShapePath::new().add(&square).add(&triangle).build();
+///     }
+/// }
+/// # bevy::ecs::system::assert_is_system(my_system);
+/// ```
     #[allow(clippy::should_implement_trait)]
     #[must_use]
     pub fn add(mut self, shape: &impl Geometry) -> Self {
@@ -75,22 +74,22 @@ impl ShapePath {
     /// # use bevy::prelude::*;
     /// # use bevy_prototype_lyon::prelude::*;
     /// #
-    /// # #[derive(Component)]
-    /// # struct Player;
-    /// #
-    /// fn my_system(mut query: Query<&mut Path, With<Player>>) {
-    ///     let mut path = query.single_mut();
-    ///
-    ///     let triangle = RegularPolygon {
-    ///         sides: 3,
-    ///         center: Vec2::new(100.0, 0.0),
-    ///         ..RegularPolygon::default()
-    ///     };
-    ///
-    ///     *path = ShapePath::build_as(&triangle);
-    /// }
-    /// # bevy::ecs::system::assert_is_system(my_system);
-    /// ```
+/// # #[derive(Component)]
+/// # struct Player;
+/// #
+/// fn my_system(mut query: Query<&mut Path, With<Player>>) {
+///     if let Some(mut path) = query.iter_mut().next() {
+///         let triangle = shapes::RegularPolygon {
+///             sides: 3,
+///             center: Vec2::new(100.0, 0.0),
+///             ..shapes::RegularPolygon::default()
+///         };
+///
+///         *path = ShapePath::build_as(&triangle);
+///     }
+/// }
+/// # bevy::ecs::system::assert_is_system(my_system);
+/// ```
     pub fn build_as(shape: &impl Geometry) -> Path {
         Self::new().add(shape).build()
     }
