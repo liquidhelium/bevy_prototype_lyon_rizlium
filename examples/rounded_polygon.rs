@@ -27,12 +27,12 @@ fn setup_system(mut commands: Commands) {
         closed: false,
     };
 
-    commands.spawn(Camera2d::default());
+    commands.spawn(Camera2d);
     commands.spawn((
         ShapeBundle {
             path: GeometryBuilder::build_as(&shape),
             ..default()
         },
-        Fill::brush(Color::CYAN),
+        Fill::brush(Color::srgb(0.0, 1.0, 1.0)),
     ));
 }

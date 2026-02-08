@@ -4,7 +4,6 @@ use bevy_prototype_lyon::prelude::*;
 fn main() {
     App::new()
         //Added msaa to reduce aliasing
-        .insert_resource(Msaa::Sample4)
         .add_plugins(DefaultPlugins)
         .add_plugins(ShapePlugin)
         .add_systems(Startup, setup_system)
@@ -21,16 +20,17 @@ struct BlacksmithMarker;
 struct ToolShackMarker;
 
 fn setup_system(mut commands: Commands) {
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn(Camera2d);
 
     commands
         .spawn((
             Name("Blacksmith".to_owned()),
             BlacksmithMarker,
-            SpatialBundle {
-                transform: Transform::from_translation(Vec3::new(-50., 0., 0.)),
-                ..default()
-            },
+            Transform::from_translation(Vec3::new(-50., 0., 0.)),
+            GlobalTransform::default(),
+            Visibility::default(),
+            InheritedVisibility::default(),
+            ViewVisibility::default(),
         ))
         //we split our art in this example to two children because our art is made out of 2 paths,
         //one path who's width is 4,
@@ -64,14 +64,15 @@ fn setup_system(mut commands: Commands) {
         .spawn((
             Name("Shack".to_owned()),
             ToolShackMarker,
-            SpatialBundle {
-                transform: Transform {
-                    translation: Vec3::new(375., 0., 0.),
-                    scale: Vec3::new(0.1, 0.1, 1.),
-                    ..Default::default()
-                },
-                ..default()
+            Transform {
+                translation: Vec3::new(375., 0., 0.),
+                scale: Vec3::new(0.1, 0.1, 1.),
+                ..Default::default()
             },
+            GlobalTransform::default(),
+            Visibility::default(),
+            InheritedVisibility::default(),
+            ViewVisibility::default(),
         ))
         //we split our art in this example to two children because our art is made out of 2 paths,
         //one path who's width is 4,

@@ -12,14 +12,13 @@
 //! `ShapeBundle`.
 
 use bevy::{
-    app::{App, Plugin}, asset::{Assets, Handle}, color::palettes::css::FUCHSIA, ecs::{
+    app::{App, Plugin}, asset::Assets, color::palettes::css::FUCHSIA, ecs::{
         query::{Changed, Or}, schedule::IntoScheduleConfigs as _, system::{Query, ResMut}
-    }, log, prelude::{
-        Color, Deref, DerefMut, PostUpdate, Resource, SystemSet
-    }, render::{
-        mesh::{Indices, Mesh, Mesh2d}, render_asset::RenderAssetUsages, render_resource::PrimitiveTopology
-    }, sprite::MeshMaterial2d
+    }, log, mesh::Indices, prelude::{
+        Color, Deref, DerefMut, Mesh, Mesh2d, MeshMaterial2d, PostUpdate, Resource, SystemSet
+    }, render::render_resource::PrimitiveTopology
 };
+use bevy::asset::RenderAssetUsages;
 use lyon_tessellation::{self as tess, BuffersBuilder};
 
 use crate::{
@@ -38,7 +37,7 @@ impl Plugin for ShapePlugin {
             .insert_resource(StrokeTessellator(stroke_tess))
             .configure_sets(
                 PostUpdate,
-                BuildShapes.after(bevy::transform::TransformSystem::TransformPropagate),
+                BuildShapes.after(bevy::transform::TransformSystems::Propagate),
             )
             .add_systems(PostUpdate, mesh_shapes_system.in_set(BuildShapes))
             .add_plugins(GradientMaterialPlugin)
@@ -98,12 +97,12 @@ fn mesh_shapes_system(
         mesh.0 = meshes.add(build_mesh(&buffers));
         // fill 与 stroke 可以兼得，但我懒了() 
         if let Some(mode) = maybe_fill_mode {
-            *material = bevy::prelude::MeshMaterial2d(gradients.add(GradientMaterial {
+            *material = MeshMaterial2d(gradients.add(GradientMaterial {
                 uniform: mode.brush.clone_as_uniform(),
             }));
         }
         else if let Some(mode) = maybe_stroke_mode {
-            *material = bevy::prelude::MeshMaterial2d(gradients.add(GradientMaterial {
+            *material = MeshMaterial2d(gradients.add(GradientMaterial {
                 uniform: mode.brush.clone_as_uniform(),
             }));
         }

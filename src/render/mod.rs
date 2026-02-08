@@ -3,24 +3,17 @@
 use bevy::{
     asset::{load_internal_asset, AssetApp, AssetId},
     color::LinearRgba,
-    image::BevyDefault as _,
     prelude::{App, Asset, Assets, Handle, Plugin, Shader, Vec2},
     reflect::prelude::*,
-    render::{
-        mesh::{MeshVertexBufferLayout, MeshVertexBufferLayoutRef},
-        render_resource::{
-            AsBindGroup, BlendComponent, BlendFactor, BlendOperation, BlendState, ColorTargetState,
-            ColorWrites, RenderPipelineDescriptor, ShaderRef, ShaderType,
-            SpecializedMeshPipelineError, TextureFormat,
-        },
-    },
-    sprite::{ColorMaterial, Material2d, Material2dKey, Material2dPlugin},
+    render::render_resource::{AsBindGroup, ShaderType},
+    shader::ShaderRef,
+    sprite_render::{AlphaMode2d, Material2d, Material2dPlugin},
 };
 use lyon_algorithms::geom::euclid::approxeq::ApproxEq;
 
 /// Handle to the custom shader with a unique random ID
 pub const GRADIENT_MATERIAL_SHADER_HANDLE: Handle<Shader> =
-    bevy::asset::weak_handle!("00000000-0000-0000-0000-000000000001");
+    bevy::asset::uuid_handle!("00000000-0000-0000-0000-000000000001");
 
 /// Plugin that provides a custom material for rendering [`Shape`]s
 pub struct GradientMaterialPlugin;
@@ -37,7 +30,8 @@ impl Plugin for GradientMaterialPlugin {
         app.add_plugins(Material2dPlugin::<GradientMaterial>::default())
             .register_asset_reflect::<GradientMaterial>();
 
-        app.world_mut()
+        let _ = app
+            .world_mut()
             .resource_mut::<Assets<GradientMaterial>>()
             .insert(
                 AssetId::<GradientMaterial>::default(),
@@ -55,13 +49,13 @@ impl Material2d for GradientMaterial {
         GRADIENT_MATERIAL_SHADER_HANDLE.into()
     }
 
-    fn alpha_mode(&self) -> bevy::sprite::AlphaMode2d {
+    fn alpha_mode(&self) -> AlphaMode2d {
         if self.uniform.start.alpha.approx_eq_eps(&1.0, &0.01)
             && self.uniform.end.alpha.approx_eq_eps(&1.0, &0.01)
         {
-            bevy::sprite::AlphaMode2d::Opaque
+            AlphaMode2d::Opaque
         } else {
-            bevy::sprite::AlphaMode2d::Blend
+            AlphaMode2d::Blend
         }
     }
 }
