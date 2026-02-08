@@ -30,6 +30,7 @@ impl Plugin for GradientMaterialPlugin {
         app.add_plugins(Material2dPlugin::<GradientMaterial>::default())
             .register_asset_reflect::<GradientMaterial>();
 
+        // Ignore the previous value; we only need to ensure a default material exists for the handle.
         let _ = app
             .world_mut()
             .resource_mut::<Assets<GradientMaterial>>()
